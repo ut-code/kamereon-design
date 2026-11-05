@@ -1,0 +1,31 @@
+/*
+ * B案・実装版の基本の値。kamereon 本体へはこのファイルをそのまま持っていく
+ * 影は1種類（ホバーと押した時だけ長さを変える）、角丸は使わない
+ */
+:root {
+  --bg: #6C3FD1;
+  --ink: #2A1650;
+  --paper: #FFFFFF;
+  --find: #C5F04A;
+  --hide: #FF7EB6;
+  --accent: #2EC4B6;
+  --sub: #EEE6FB;
+  --line: #D8CCF0;
+  --muted: #5B4A7A;
+  --camo: #8D68EA;
+
+  --radius: 0;
+  --edge: 4px solid #FFFFFF;
+  --shadow: 0 5px 0 rgba(42, 22, 80, .45);
+  --shadow-hover: 0 7px 0 rgba(42, 22, 80, .45);
+  --shadow-active: 0 2px 0 rgba(42, 22, 80, .45);
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+
+  --font-display: "Yusei Magic", sans-serif;
+  --font-body: "M PLUS 1", sans-serif;
+}

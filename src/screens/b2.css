@@ -1,0 +1,89 @@
+/* B案・実装版の画面のレイアウト。部品の見た目は ui.css にある */
+
+.b2-screen {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+/* キャンバスでモーダルだけを置くとき。文字の設定だけ使い、背景は付けない */
+.b2-screen--bare { min-height: 0; background: none; }
+
+.b2-home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-sizing: border-box;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--space-3) 40px var(--space-5);
+}
+.b2-home__header { display: flex; justify-content: flex-end; }
+.b2-home__modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-4); }
+.b2-home__ranking { display: flex; flex-direction: column; gap: var(--space-2); }
+.b2-home__ranking-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.b2-home__ranking-head h2 { margin: 0; font: 400 28px/1.2 var(--font-display); }
+.b2-home__periods { display: flex; gap: var(--space-1); }
+.b2-home__lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-5); }
+
+.b2-logo { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); margin: 0; font-weight: 400; }
+.b2-logo__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2); }
+.b2-logo__row--s { gap: var(--space-1); }
+.b2-logo__web {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 40px;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border: var(--edge);
+  box-shadow: var(--shadow);
+  font: 22px/1 var(--font-display);
+}
+
+/* 遊び方のダイアログ。枠・見出し・下のボタンは ui.css の .ui-dialog */
+.b2-rules { width: min(720px, calc(100% - 48px)); }
+.b2-rules__body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.b2-rules__steps { display: flex; flex-direction: column; gap: var(--space-1); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.b2-rules__steps li { display: flex; align-items: center; gap: var(--space-2); font-size: 16px; font-weight: 700; }
+
+.b2-parts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  width: 800px;
+  padding: var(--space-4) 40px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+.b2-parts section { display: flex; flex-direction: column; gap: 12px; }
+.b2-parts__label { align-self: flex-start; margin: 0; padding: 4px 12px; background: var(--paper); font: 400 16px/1.2 var(--font-display); }
+.b2-parts__swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px var(--space-2); color: var(--paper); }
+.b2-parts__swatch { display: flex; flex-direction: column; gap: 4px; }
+.b2-parts__swatch div { height: 40px; box-sizing: border-box; border: var(--edge); }
+.b2-parts__swatch div.is-camo { border: 4px dashed var(--camo); background: var(--bg); }
+.b2-parts__swatch strong { font-size: 12px; }
+.b2-parts__swatch span { font-size: 11px; }
+.b2-parts__fonts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+.b2-parts__fonts .ui-panel { display: flex; flex-direction: column; gap: 6px; padding: var(--space-2); }
+.b2-parts__fonts span { font-size: 12px; font-weight: 700; }
+.b2-parts__fonts span:last-child { color: var(--muted); font-weight: 500; }
+.b2-parts__sample-display { font: 400 32px/1.25 var(--font-display); }
+.b2-parts__sample-body { font-size: 24px; font-weight: 800; line-height: 1.6; }
+.b2-parts__values { display: grid; gap: var(--space-1); margin: 0; padding: var(--space-2) var(--space-3); font-size: 13px; line-height: 1.5; }
+.b2-parts__values div { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: var(--space-2); }
+.b2-parts__values dt { font-weight: 800; }
+.b2-parts__values dd { margin: 0; white-space: pre-line; }
+.b2-parts__row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-3); }
+.b2-parts__item { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; color: var(--paper); font-size: 11px; font-weight: 700; }
+.b2-parts__inline { display: flex; align-items: center; gap: var(--space-1); height: 56px; }
+.b2-parts__controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-2); color: var(--ink); font-size: 15px; }
+.b2-parts__marks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); color: var(--paper); font-size: 11px; font-weight: 700; }
+.b2-parts__marks > div { display: flex; flex-direction: column; gap: var(--space-1); }
+.b2-parts__wide { grid-column: span 2; }
+/* 目印を見せる台。ページの明るい壁の色 */
+.b2-parts__mark { position: relative; display: block; height: 172px; overflow: hidden; background: #E9EDF2; color: var(--ink); }

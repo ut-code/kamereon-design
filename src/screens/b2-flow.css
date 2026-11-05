@@ -1,0 +1,205 @@
+/* B案・実装版のタイトル以外の画面のレイアウト。部品の見た目は ui.css、タイトルとパーツ表は b2.css */
+
+.b2-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- ホームから入る画面（ページ選択・選んだページ・体型選択） ---- */
+
+/* 幅と余白はタイトル画面（.b2-home）と同じ */
+.b2-flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-sizing: border-box;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--space-3) 40px var(--space-5);
+}
+
+.b2-pagehead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); color: var(--paper); }
+.b2-pagehead__group { display: flex; align-items: center; gap: var(--space-2); }
+.b2-pagehead__home { color: var(--paper); font-size: 15px; }
+
+.b2-title {
+  align-self: flex-start;
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  font: 400 36px/1.25 var(--font-display);
+}
+.b2-lead { margin: calc(var(--space-2) * -1) 0 0; color: var(--paper); font-size: 16px; font-weight: 700; }
+
+.b2-sites { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+.b2-site { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-2); }
+.b2-site__preview { display: block; width: 100%; aspect-ratio: 4 / 5; box-sizing: border-box; border: 2px solid var(--line); object-fit: cover; object-position: top; }
+.b2-site h2 { min-height: 2.5em; margin: 0; font: 400 20px/1.25 var(--font-display); word-break: keep-all; overflow-wrap: anywhere; }
+.b2-site--soon {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border: 4px dashed var(--camo);
+  color: var(--camo);
+  font: 400 22px var(--font-display);
+}
+
+.b2-ready { display: grid; grid-template-columns: minmax(0, 1fr) 400px; align-items: start; gap: var(--space-5); }
+.b2-ready__site { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: var(--space-2); }
+.b2-ready__site img { display: block; width: 100%; aspect-ratio: 16 / 10; box-sizing: border-box; border: 2px solid var(--line); object-fit: cover; object-position: top; }
+.b2-ready__site figcaption { font: 400 24px/1.25 var(--font-display); }
+.b2-ready__side { display: flex; flex-direction: column; gap: var(--space-4); }
+.b2-ready__rules { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); }
+.b2-ready__rules h2 { margin: 0; font: 400 22px/1.2 var(--font-display); }
+.b2-ready__go { width: 100%; }
+
+.b2-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+
+.b2-selected { align-self: flex-start; margin: calc(var(--space-2) * -1) 0 0; padding: var(--space-1) var(--space-2); background: var(--paper); font-size: 15px; font-weight: 500; }
+
+.b2-bodies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); min-width: 0; margin: 0; padding: 0; border: 0; }
+.b2-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2) var(--space-3);
+  border: var(--edge);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.b2-body:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.b2-body.is-selected { background: var(--hide); }
+.b2-body.is-soon { background: var(--sub); box-shadow: none; color: var(--muted); cursor: not-allowed; }
+.b2-body.is-soon:hover { transform: none; }
+.b2-body:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
+.b2-body strong { font: 400 28px/1.2 var(--font-display); }
+.b2-body__state { display: flex; align-items: center; min-height: 20px; font-size: 14px; font-weight: 800; }
+/* 体型の見本は本体の BodyPreview。色は currentColor なので、ここで決める */
+.b2-body__art { display: grid; place-items: center; color: var(--ink); }
+.b2-body.is-soon .b2-body__art { color: var(--line); }
+
+.b2-flowfoot { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-3); }
+.b2-flowfoot p { margin: 0; color: var(--paper); font-size: 14px; font-weight: 700; }
+
+/* ---- ゲームの画面（プレイ中・終了・編集） ---- */
+
+.b2-game { display: flex; flex-direction: column; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--font-body); }
+
+/* 見つける画面の上の帯。左右の幅をそろえ、残り時間をいつも真ん中に置く */
+.b2-play {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  box-sizing: border-box;
+  height: 72px;
+  padding: 0 var(--space-3);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+.b2-play__group { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.b2-play__group--end { justify-content: flex-end; }
+.b2-play__zoom { display: flex; align-items: center; gap: var(--space-1); color: var(--muted); font-size: 14px; font-weight: 800; }
+.b2-play__box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 var(--space-2);
+  border: var(--edge);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
+.b2-play__timer span { font-size: 12px; font-weight: 700; }
+.b2-play__timer strong { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.b2-play__result { font: 400 22px/1 var(--font-display); }
+.b2-play__cooldown { display: flex; align-items: center; gap: 4px; height: 32px; padding: 0 10px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 800; white-space: nowrap; }
+.b2-play__people { display: flex; gap: 4px; }
+.b2-play__people span { width: 16px; height: 16px; box-sizing: border-box; border: 2px solid var(--line); background: var(--sub); }
+.b2-play__people span.is-found { border-color: var(--ink); background: var(--find); }
+.b2-play__count { font-size: 20px; font-weight: 800; white-space: nowrap; }
+.b2-play__count small { color: var(--muted); font-size: 13px; }
+.b2-play__score { display: flex; align-items: baseline; gap: 4px; padding-left: var(--space-2); border-left: 2px dashed var(--line); font-size: 26px; font-weight: 800; white-space: nowrap; }
+.b2-play__score small { color: var(--muted); font-size: 12px; }
+.b2-play__score small:last-child { color: var(--ink); font-size: 13px; }
+
+/* 隠す画面の上の帯。2段で、どちらの段も左右に分ける */
+.b2-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: none;
+  padding: 12px var(--space-3);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+.b2-bar__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.b2-bar__group { display: flex; align-items: center; gap: var(--space-1); }
+.b2-bar__field { display: flex; align-items: center; gap: var(--space-1); font-size: 15px; font-weight: 700; white-space: nowrap; }
+.b2-bar__field .ui-range { width: 100px; }
+.b2-help { font-size: 20px; }
+
+.b2-hint { position: relative; z-index: 1; display: flex; align-items: center; gap: var(--space-2); flex: none; height: 36px; margin: 0; padding: 0 var(--space-3); background: var(--sub); font-size: 14px; font-weight: 700; }
+.b2-hint strong { padding: 2px var(--space-1); background: var(--hide); }
+
+.b2-stage { position: relative; flex: 1; overflow: hidden; background: var(--bg); }
+.b2-stage__page { position: absolute; top: 0; left: 50%; width: 1280px; margin-left: -640px; }
+.b2-stage__page > img { display: block; }
+
+/* ページの上のカメレオン。目印は四角い枠だけで、色と実線・破線で見分ける */
+.b2-mark { position: absolute; width: 58px; height: 128px; isolation: isolate; }
+.b2-mark > svg { position: relative; display: block; }
+.b2-mark::after { position: absolute; inset: -10px; box-sizing: border-box; pointer-events: none; }
+.b2-mark--found::after,
+.b2-mark--missed::after { content: ""; border: 4px solid var(--find); outline: 2px solid var(--ink); }
+.b2-mark--missed::after { border-color: var(--hide); }
+.b2-mark--decoy::after,
+.b2-mark--tripped::after { content: ""; border: 3px dashed var(--camo); outline: 2px solid var(--paper); }
+.b2-mark--tripped > svg { opacity: .5; }
+.b2-mark--editing::after { content: ""; inset: -4px; border: 3px solid var(--hide); }
+.b2-mark--editing-decoy::after { content: ""; inset: -4px; border: 3px dashed var(--camo); }
+
+.b2-mark__label {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  padding: 2px var(--space-1);
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+.b2-mark--found .b2-mark__label { background: var(--find); }
+.b2-mark--missed .b2-mark__label { background: var(--hide); }
+.b2-mark--decoy .b2-mark__label,
+.b2-mark--tripped .b2-mark__label { background: var(--camo); color: var(--paper); }
+/* 編集中の札は人型の左上に付ける（本体の .fig-tag と同じ位置） */
+.b2-mark--editing .b2-mark__label,
+.b2-mark--editing-decoy .b2-mark__label { bottom: calc(100% + 6px); left: -4px; transform: none; }
+.b2-mark--editing .b2-mark__label { background: var(--hide); }
+.b2-mark--editing-decoy .b2-mark__label { background: var(--camo); color: var(--paper); }
+
+.b2-pop { position: absolute; padding: 4px 12px; border: var(--edge); background: var(--hide); box-shadow: var(--shadow); font: 400 18px/1.2 var(--font-display); white-space: nowrap; }
+
+/* ---- ダイアログの中身 ---- */
+
+.b2-help-dialog { width: 100%; }
+.b2-help-section { display: flex; flex-direction: column; gap: 12px; }
+.b2-help-tools { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; }
+.b2-help-tools div { display: grid; grid-template-columns: 128px minmax(0, 1fr); align-items: center; gap: var(--space-2); }
+.b2-help-tools dt { display: flex; align-items: center; gap: var(--space-1); height: 36px; padding: 0 12px; background: var(--sub); font: 400 16px var(--font-display); }
+.b2-help-tools dd { margin: 0; font-size: 15px; font-weight: 500; }
+.b2-help-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding-left: 20px; font-size: 15px; font-weight: 500; line-height: 1.6; }
+
+/* キャンバスでダイアログだけを置くときは、枠の幅いっぱいに広げる */
+.b2-screen--bare .ui-dialog { width: 100%; }
