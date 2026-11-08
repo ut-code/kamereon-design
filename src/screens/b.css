@@ -1,4 +1,4 @@
-/* B案（元の案）。比較用。要素ごとの傾きは b.jsx の style で付けている */
+/* B案。要素ごとの傾きは b.jsx の style で付けている */
 
 .b-screen { position: relative; overflow: hidden; min-height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font-body); }
 .b-bg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }

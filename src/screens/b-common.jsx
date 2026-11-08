@@ -3,7 +3,7 @@ import "./b.css"
 import "./b-flow.css"
 
 /*
- * B案（元の案）の共通部品。タイトル以外の画面もこの部品で組む
+ * B案の共通部品。タイトル以外の画面もこの部品で組む
  * 指針：紫の地に葉っぱと人型を散らす／ボタンは白い縁のステッカーを少し傾けて貼る／
  * 紙（白い板）はテープで留める／角丸は使わず、影は真下にずらした濃い紫
  */
@@ -109,7 +109,7 @@ export function FlowHeader({ mode, step, back = "home" }) {
   )
 }
 
-export { Icon } from "../ui/icon.jsx"
+export { Icon } from "./icon.jsx"
 
 /**
  * 体型の見本。本体の Home.jsx の BodyPreview と同じ形（丸い頭・首・角の丸い胴・腕・脚）

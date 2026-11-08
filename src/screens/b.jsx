@@ -2,7 +2,7 @@ import { findRanking, hideRanking } from "./data.js"
 import { Board, FigureIcon, Ground, Reticle, Slot, Sticker, Tab, figurePath, rotate } from "./b-common.jsx"
 
 /*
- * B案（元の案）。傾き（rotate）、重ね置き、SVG の背景を使う
+ * B案。傾き（rotate）、重ね置き、SVG の背景を使う
  * タイトルとルール、パーツ表がこのファイル。見つける・隠すの画面は b-find.jsx・b-hide.jsx、共通部品は b-common.jsx
  */
 

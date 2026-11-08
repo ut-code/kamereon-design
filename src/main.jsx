@@ -4,48 +4,20 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { PartsB, RulesB, TitleB } from "./screens/b.jsx"
 import { FindEmptyB, FindIntroB, FindOverB, FindPlayB, FindReadyB, SiteSelectB } from "./screens/b-find.jsx"
 import { HideBodyB, HideEditB, HideHelpB, HideSavedB } from "./screens/b-hide.jsx"
-import { PartsB2, RulesPanel, TitleB2 } from "./screens/b2.jsx"
-import { FindEmptyB2, FindIntroB2, FindOverB2, FindPlayB2, FindReadyB2, SiteSelectB2 } from "./screens/b2-find.jsx"
-import { HideBodyB2, HideEditB2, HideHelpB2, HideSavedB2 } from "./screens/b2-hide.jsx"
 import "./tokens.css"
 import "./canvas.css"
 
-// 案ごとの大見出しの高さ。実装版の下に元の案を置く
-const top = { b2: 0, b: 5300 }
-
-// 案ごとの大見出し
+// 大見出し
 const sections = [
-  { name: "B案・実装版（2週間で作り切る版）", x: 0, y: top.b2 },
-  { name: "B案（元の案）", x: 0, y: top.b },
+  { name: "B案", x: 0, y: 0 },
 ]
 
-// 案の中の行。上からルール、タイトルと見つける、隠す、パーツと隠すの遊び方。実装版と元の案で同じ並びにする
-const rowsAt = (y) => ({ rules: y + 140, find: y + 800, hide: y + 1904, extra: y + 3008 })
-const rowB2 = rowsAt(top.b2)
-const rowB = rowsAt(top.b)
+// 行。上からルール、タイトルと見つける、隠す、パーツと隠すの遊び方
+const rowB = { rules: 140, find: 800, hide: 1904, extra: 3008 }
 
 // height を省くと 900。null にすると中身の高さに合わせる
 // bare は枠を付けずに中身だけを置く（モーダルだけを見せるときなど）
 const screens = [
-  // ルールのダイアログはタイトルの「？ ルール」の真上に置き、線をまっすぐ上へ引く
-  { id: "b2-rules", name: "ルール（オーバーレイで開くダイアログ）", x: 600, y: rowB2.rules, width: 720, height: null, bare: true, Screen: () => <div className="b2-screen b2-screen--bare"><RulesPanel /></div> },
-  { id: "b2-title", name: "タイトル", x: 0, y: rowB2.find, Screen: () => <TitleB2 /> },
-  { id: "b2-find-site", name: "見つける 1: ページ選択", x: 1600, y: rowB2.find, Screen: () => <SiteSelectB2 mode="find" /> },
-  { id: "b2-find-ready", name: "見つける 2: 選んだページ", x: 3200, y: rowB2.find, Screen: FindReadyB2 },
-  // 「探しに行く」の高さにスタート前を置いて線を水平にし、まだ誰も隠れていないときはその上に置く
-  { id: "b2-find-intro", name: "見つける 3: スタート前（ダイアログ）", x: 4800, y: rowB2.find + 373, width: 640, height: null, bare: true, Screen: FindIntroB2 },
-  { id: "b2-find-empty", name: "見つける 3: まだ誰も隠れていないとき（ダイアログ）", x: 4800, y: rowB2.find, width: 640, height: null, bare: true, Screen: FindEmptyB2 },
-  { id: "b2-find-play", name: "見つける 4: プレイ中", x: 5600, y: rowB2.find, Screen: FindPlayB2 },
-  { id: "b2-find-over", name: "見つける 5: 終了（タイムアップ）", x: 7200, y: rowB2.find, Screen: FindOverB2 },
-  { id: "b2-hide-site", name: "隠す 1: ページ選択", x: 1600, y: rowB2.hide, Screen: () => <SiteSelectB2 mode="hide" /> },
-  { id: "b2-hide-body", name: "隠す 2: 体型選択", x: 3200, y: rowB2.hide, Screen: HideBodyB2 },
-  { id: "b2-hide-edit", name: "隠す 3: 編集（移動）", x: 4800, y: rowB2.hide, Screen: () => <HideEditB2 tool="move" /> },
-  { id: "b2-hide-paint", name: "隠す 3: 編集（ペンで塗る）", x: 6400, y: rowB2.hide, Screen: () => <HideEditB2 tool="pen" /> },
-  { id: "b2-hide-saved", name: "隠す 4: 隠れた（ダイアログ）", x: 8000, y: rowB2.hide, width: 640, height: null, bare: true, Screen: HideSavedB2 },
-  { id: "b2-parts", name: "パーツと実装メモ", x: 0, y: rowB2.extra, width: 800, height: null, Screen: PartsB2 },
-  // 遊び方は編集の「？」の真下に置き、線をまっすぐ下へ引く
-  { id: "b2-hide-help", name: "隠す: 遊び方（「？」で開くダイアログ）", x: 4800, y: rowB2.extra, width: 720, height: null, bare: true, Screen: HideHelpB2 },
-
   // ルールのモーダルはタイトルの「？ ルール」の真上に置き、線をまっすぐ上へ引く
   { id: "b-rules", name: "ルール（オーバーレイで開くモーダル）", x: 600, y: rowB.rules, width: 840, height: null, bare: true, Screen: RulesB },
   { id: "b-title", name: "タイトル", x: 0, y: rowB.find, Screen: TitleB },
@@ -70,19 +42,6 @@ const screens = [
 // ボタンを押して画面が変わる・モーダルが開くところだけを結ぶ線（時間切れや道具の切り替えのような、押さずに変わる・同じ画面の中の変化は結ばない）。座標は書かず、セレクターで要素を探して描いた後に測る
 // side は押す要素のどの辺から線を出すか。right（省略時）は右の画面へ、top・bottom は上下の画面へ
 const links = [
-  { from: ["b2-title", ".b2-home__header .ui-btn"], to: ["b2-rules", ".ui-dialog"], side: "top" },
-  { from: ["b2-title", ".b2-home__modes .ui-btn:first-child"], to: ["b2-find-site", ".b2-sites"] },
-  { from: ["b2-title", ".b2-home__modes .ui-btn:last-child"], to: ["b2-hide-site", ".b2-sites"], side: "bottom" },
-  { from: ["b2-find-site", ".b2-site:first-child .ui-btn"], to: ["b2-find-ready", ".b2-flow"] },
-  // 「探しに行く」は、出題できるカメレオンがいればスタート前、いなければ「まだ誰も隠れていません」
-  { from: ["b2-find-ready", ".b2-ready__go"], to: ["b2-find-intro", ".ui-dialog"] },
-  { from: ["b2-find-ready", ".b2-ready__go"], to: ["b2-find-empty", ".ui-dialog"] },
-  { from: ["b2-find-intro", ".ui-dialog__foot .ui-btn"], to: ["b2-find-play", ".b2-stage"] },
-  { from: ["b2-hide-site", ".b2-site:first-child .ui-btn"], to: ["b2-hide-body", ".b2-flow"] },
-  { from: ["b2-hide-body", ".b2-body__go"], to: ["b2-hide-edit", ".b2-stage"] },
-  { from: ["b2-hide-edit", ".b2-help"], to: ["b2-hide-help", ".ui-dialog"], side: "bottom" },
-  { from: ["b2-hide-paint", ".b2-save"], to: ["b2-hide-saved", ".ui-dialog"] },
-
   { from: ["b-title", ".b-home__rules"], to: ["b-rules", ".b-modal"], side: "top" },
   { from: ["b-title", ".b-mode:first-child"], to: ["b-find-site", ".b-sites"] },
   { from: ["b-title", ".b-mode:last-child"], to: ["b-hide-site", ".b-sites"], side: "bottom" },
@@ -97,7 +56,7 @@ const links = [
   { from: ["b-hide-paint", ".b-save"], to: ["b-hide-saved", ".b-modal"] },
 ]
 
-const size = { width: 8740, height: 9600 }
+const size = { width: 8740, height: 4300 }
 
 /** キャンバスの中での位置。拡大・縮小の影響を受けない offset の値を、キャンバスの枠まで足し上げる */
 function offsetIn(el, root) {

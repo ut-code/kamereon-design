@@ -4,7 +4,7 @@ import {
 } from "./b-common.jsx"
 
 /*
- * B案（元の案）の「隠す」の画面。ページ選択は b-find.jsx の SiteSelectB を mode="hide" で使う
+ * B案の「隠す」の画面。ページ選択は b-find.jsx の SiteSelectB を mode="hide" で使う
  * 流れ：ページ選択 → 体型選択 → 編集（移動・ペン）→ 隠れた（モーダル）。編集の「？」で遊び方のモーダル
  */
 
