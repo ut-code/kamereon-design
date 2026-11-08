@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { PartsB, RulesB, TitleB } from "./screens/b.jsx"
 import { FindEmptyB, FindIntroB, FindOverB, FindPlayB, FindReadyB, SiteSelectB } from "./screens/b-find.jsx"
-import { HideBodyB, HideEditB, HideHelpB, HideSavedB } from "./screens/b-hide.jsx"
+import { HideEditB, HideHelpB, HidePaintB, HideSavedB, HideTimeUpB } from "./screens/b-hide.jsx"
 import "./tokens.css"
 import "./canvas.css"
 
@@ -28,14 +28,16 @@ const screens = [
   { id: "b-find-empty", name: "見つける 3: まだ誰も隠れていないとき（モーダル）", x: 4800, y: rowB.find, width: 640, height: null, bare: true, Screen: FindEmptyB },
   { id: "b-find-play", name: "見つける 4: プレイ中", x: 5600, y: rowB.find, Screen: FindPlayB },
   { id: "b-find-over", name: "見つける 5: 終了（タイムアップ）", x: 7200, y: rowB.find, Screen: FindOverB },
+  // 隠すはページを選ぶとそのまま隠れる画面へ進む。体型は隠れる画面の帯で選ぶ
   { id: "b-hide-site", name: "隠す 1: ページ選択", x: 1600, y: rowB.hide, Screen: () => <SiteSelectB mode="hide" /> },
-  { id: "b-hide-body", name: "隠す 2: 体型選択", x: 3200, y: rowB.hide, Screen: HideBodyB },
-  { id: "b-hide-edit", name: "隠す 3: 編集（移動）", x: 4800, y: rowB.hide, Screen: () => <HideEditB tool="move" /> },
-  { id: "b-hide-paint", name: "隠す 3: 編集（ペンで塗る）", x: 6400, y: rowB.hide, Screen: () => <HideEditB tool="pen" /> },
-  { id: "b-hide-saved", name: "隠す 4: 隠れた（モーダル）", x: 8000, y: rowB.hide, width: 640, height: null, bare: true, Screen: HideSavedB },
+  { id: "b-hide-edit", name: "隠す 2: 編集（移動）", x: 3200, y: rowB.hide, Screen: HideEditB },
+  { id: "b-hide-paint", name: "隠す 2: 編集（「塗る」で開く色塗り・ポーズのダイアログ）", x: 4800, y: rowB.hide, Screen: HidePaintB },
+  { id: "b-hide-saved", name: "隠す 3: 隠れた（モーダル）", x: 6400, y: rowB.hide, width: 640, height: null, bare: true, Screen: HideSavedB },
+  // 5分たつと押さずに出るので線は結ばない
+  { id: "b-hide-timeup", name: "隠す: タイムアップ（5分たつと出るモーダル）", x: 7200, y: rowB.hide, width: 640, height: null, bare: true, Screen: HideTimeUpB },
   { id: "b-parts", name: "パーツ", x: 0, y: rowB.extra, width: 800, height: null, Screen: PartsB },
   // 遊び方は編集の「？」の真下に置き、線をまっすぐ下へ引く
-  { id: "b-hide-help", name: "隠す: 遊び方（「？」で開くモーダル）", x: 4800, y: rowB.extra, width: 760, height: null, bare: true, Screen: HideHelpB },
+  { id: "b-hide-help", name: "隠す: 遊び方（「？」で開くモーダル）", x: 3200, y: rowB.extra, width: 760, height: null, bare: true, Screen: HideHelpB },
 ]
 
 
@@ -50,8 +52,8 @@ const links = [
   { from: ["b-find-ready", ".b-ready__go"], to: ["b-find-intro", ".b-modal"] },
   { from: ["b-find-ready", ".b-ready__go"], to: ["b-find-empty", ".b-modal"] },
   { from: ["b-find-intro", ".b-modal__actions .b-sticker"], to: ["b-find-play", ".b-stage"] },
-  { from: ["b-hide-site", ".b-site:first-child .b-sticker"], to: ["b-hide-body", ".b-flow"] },
-  { from: ["b-hide-body", ".b-body__go"], to: ["b-hide-edit", ".b-stage"] },
+  { from: ["b-hide-site", ".b-site:first-child .b-sticker"], to: ["b-hide-edit", ".b-stage"] },
+  { from: ["b-hide-edit", ".b-tool--pen"], to: ["b-hide-paint", ".b-paint"] },
   { from: ["b-hide-edit", ".b-help"], to: ["b-hide-help", ".b-modal"], side: "bottom" },
   { from: ["b-hide-paint", ".b-save"], to: ["b-hide-saved", ".b-modal"] },
 ]

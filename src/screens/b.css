@@ -40,7 +40,6 @@
 }
 .b-logo__tile--s { width: 58px; height: 58px; border: 0; background: var(--paper); box-shadow: 0 4px 0 rgba(42, 22, 80, .45); font-size: 38px; }
 .b-logo__tile--camo { border: 5px dashed var(--camo); background: var(--bg); box-shadow: none; color: var(--camo); }
-.b-logo__web { position: absolute; right: -54px; bottom: -22px; padding: 4px 22px 6px; background: rgba(197, 240, 74, .88); font-size: 30px; transform: rotate(-9deg); }
 
 .b-home__modes { display: flex; flex-wrap: wrap; justify-content: center; gap: 44px; padding-top: 6px; }
 .b-mode { display: flex; align-items: center; justify-content: center; gap: 18px; width: 380px; height: 120px; font-size: 50px; }
@@ -81,6 +80,9 @@
   cursor: pointer;
 }
 .b-tab--off { background: var(--sub); box-shadow: 0 3px 0 rgba(42, 22, 80, .25); }
+/* 白いボタン。白い縁が白い紙・帯・ダイアログに溶けて輪郭が消えるので、縁の外側に影と同じ濃い紫の細い線を引く（型抜きしたステッカーの線） */
+.b-sticker--paper,
+.b-tab--paper { outline: 2px solid rgba(42, 22, 80, .55); }
 .b-chip { padding: 1px 6px; background: var(--ink); color: var(--paper); font: 700 11px var(--font-body); }
 
 .b-ranking { flex: 1 1 380px; min-width: 0; }
@@ -89,8 +91,10 @@
 .b-ranking__head > span { color: var(--muted); font-size: 12px; font-weight: 700; }
 .b-ranking__mark { width: 16px; height: 16px; box-shadow: 0 2px 0 rgba(42, 22, 80, .4); }
 .b-ranking ol { margin: 0; padding: 0; list-style: none; border-bottom: 2px dashed var(--line); }
-.b-ranking li { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; height: 46px; border-top: 2px dashed var(--line); }
+.b-ranking li { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; min-height: 46px; border-top: 2px dashed var(--line); }
 .b-ranking__badge { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; font-size: 17px; font-weight: 800; }
+.b-ranking__person { display: flex; flex-direction: column; min-width: 0; padding: 4px 0; }
+.b-ranking__detail { color: var(--muted); font-size: 12px; font-weight: 700; }
 .b-ranking__name { overflow: hidden; font-size: 18px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
 .b-ranking__score { font-size: 22px; font-weight: 800; }
 .b-ranking__score small { margin-left: 3px; font-size: 13px; }

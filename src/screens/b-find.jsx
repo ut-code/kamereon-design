@@ -8,38 +8,37 @@ import {
  * 流れ：ページ選択 → 選んだページ → スタート前（モーダル）→ プレイ中 → 終了
  */
 
-const siteTilts = [-1.5, 1.2, -0.8, 1.6]
+const siteTilts = [-1.5, 1.2, -0.8, 1.6, -1.1]
 const siteTapes = ["rgba(46, 196, 182, .78)", "rgba(255, 126, 182, .8)", "rgba(197, 240, 74, .85)"]
 
-/** Webページを選ぶ。見つける・隠すで同じ画面を使い、mode で色と手順の表示を変える */
+/**
+ * Webページを選ぶ。見つける・隠すで同じ画面を使い、mode で色を変える
+ * 本体は SITES の5ページを並べる（4ページに満たないときだけ「準備中」で埋める）。隠すはここから直接、隠れる画面へ進む
+ */
 export function SiteSelectB({ mode }) {
   return (
     <div className="b-screen">
       <Ground />
       <main className="b-flow">
-        <FlowHeader mode={mode} step={mode === "hide" ? 1 : undefined} />
+        <FlowHeader mode={mode} />
         <Heading>Webページを選ぶ</Heading>
         <p className="b-lead">{mode === "find" ? "カメレオンが潜んでいるページを選んでください" : "カメレオンを隠すページを選んでください"}</p>
         <div className="b-sites">
           {sites.map((site, index) => (
             <article key={site.id} className="b-site" style={rotate(siteTilts[index])}>
-              <span className="b-site__tape" style={{ background: siteTapes[index], ...rotate(index % 2 ? 4 : -4) }} aria-hidden="true" />
+              <span className="b-site__tape" style={{ background: siteTapes[index % siteTapes.length], ...rotate(index % 2 ? 4 : -4) }} aria-hidden="true" />
               <img className="b-site__preview" src={asset(site.image)} alt="" />
               <h2>{site.title}</h2>
               <Sticker size="s" color={mode} tilt={index % 2 ? 2 : -2}>選択する →</Sticker>
             </article>
           ))}
-          <div className="b-site b-site--soon" style={rotate(siteTilts[3])}>
-            <strong aria-hidden="true">？</strong>
-            <span>準備中</span>
-          </div>
         </div>
       </main>
     </div>
   )
 }
 
-/** 選んだページの確認。写真のように貼ったページと、ルールの要点、「探しに行く」 */
+/** 選んだページの確認。写真のように貼ったページと「探しに行く」 */
 export function FindReadyB() {
   const site = sites[0]
   return (
@@ -56,14 +55,6 @@ export function FindReadyB() {
             <figcaption>{site.title}</figcaption>
           </figure>
           <div className="b-ready__side">
-            <Board tilt={1.2} tapes={[null, "find"]} className="b-ready__rules">
-              <h2>このページのルール</h2>
-              <ul className="b-facts">
-                <li><strong style={{ background: "var(--find)", ...rotate(-3) }}>5体</strong>が隠れている</li>
-                <li><strong style={{ background: "var(--accent)", ...rotate(2) }}>3分</strong>以内に見つけてクリック</li>
-                <li><strong style={{ background: "var(--hide)", ...rotate(-2) }}>−10秒</strong>デコイを押すと減る</li>
-              </ul>
-            </Board>
             <Sticker size="l" color="find" tilt={-2} className="b-ready__go">探しに行く →</Sticker>
           </div>
         </div>
@@ -78,9 +69,9 @@ export function FindIntroB() {
     <Bare>
       <Board as="div" role="dialog" aria-modal="true" aria-labelledby="b-intro-title" className="b-modal" tapes={["accent", "find"]}>
         <h2 id="b-intro-title" className="b-modal__title">カメレオンを探せ！</h2>
-        <p>このページのどこかに、最大5人のカメレオンが潜んでいます。<br />見つけたらクリック！</p>
+        <p>このページのどこかに、最大5体のカメレオンが潜んでいます。<br />見つけたらクリック！<br />照準を近づけると、カメレオンにうっすら影がつきます。</p>
         <div className="b-stats">
-          <div style={{ background: "var(--find)", ...rotate(-2) }}><strong>5人</strong><span>潜んでいる</span></div>
+          <div style={{ background: "var(--find)", ...rotate(-2) }}><strong>最大5体</strong><span>潜んでいる</span></div>
           <div style={{ background: "var(--accent)", ...rotate(1.5) }}><strong>3:00</strong><span>制限時間</span></div>
           <div style={{ background: "var(--hide)", ...rotate(-1) }}><strong>−10秒</strong><span>デコイを押すと</span></div>
         </div>
@@ -115,7 +106,7 @@ function FindHud({ over = false }) {
     <header className="b-hud">
       <div className="b-hud__group">
         <Tab tilt={-2}>← ホーム</Tab>
-        <span className="b-hud__mode"><span className="b-hud__mark" style={{ background: "var(--find)" }} />見つける</span>
+        <span className="b-hud__mode">見つける</span>
         <span className="b-hud__zoom"><Icon name="search" /><Slider value={0} width={110} />100%</span>
       </div>
       {over ? (

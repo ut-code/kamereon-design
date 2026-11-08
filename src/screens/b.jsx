@@ -6,23 +6,26 @@ import { Board, FigureIcon, Ground, Reticle, Slot, Sticker, Tab, figurePath, rot
  * タイトルとルール、パーツ表がこのファイル。見つける・隠すの画面は b-find.jsx・b-hide.jsx、共通部品は b-common.jsx
  */
 
-const logoSmall = [["め", -6], ["っ", 4], ["ち", -3], ["ゃ", 5]]
+const logoSmall = [["む", -6], ["っ", 4], ["ち", -3], ["ゃ", 5]]
 const logoLarge = [["カ", "var(--hide)", -4], ["メ", "var(--find)", 3], ["レ", "var(--accent)", -2], ["オ", "camo", 4], ["ン", "var(--paper)", -3]]
 const badgeTilt = [[-6, 4, -3], [5, -4, 3]]
 
-function Ranking({ title, color, label, unit, entries, tilt, markTilt }) {
+function Ranking({ title, color, entries, tilt, markTilt, detail }) {
   return (
     <div className="b-ranking">
       <div className="b-ranking__head">
         <h3><span className="b-ranking__mark" style={{ background: color, ...rotate(markTilt) }} aria-hidden="true" />{title}</h3>
-        <span>{label}</span>
+        <span>スコア</span>
       </div>
       <ol>
         {entries.slice(0, 3).map((entry, index) => (
           <li key={entry.name}>
             <span className="b-ranking__badge" style={{ background: index === 0 ? color : "var(--sub)", ...rotate(tilt[index]) }}>{index + 1}</span>
-            <span className="b-ranking__name">{entry.name}</span>
-            <span className="b-ranking__score">{entry.score}<small>{unit}</small></span>
+            <span className="b-ranking__person">
+              <span className="b-ranking__name">{entry.name}</span>
+              {detail && <span className="b-ranking__detail">{detail(entry)}</span>}
+            </span>
+            <span className="b-ranking__score">{entry.score}<small>点</small></span>
           </li>
         ))}
       </ol>
@@ -37,9 +40,9 @@ export function TitleB() {
       <Ground />
 
       <div className="b-home">
-        <button type="button" className="b-sticker b-home__rules" style={rotate(3)}>？ ルール</button>
+        <button type="button" className="b-sticker b-sticker--paper b-home__rules" style={rotate(3)}>？ ルール</button>
 
-        <h1 className="b-logo" aria-label="めっちゃカメレオン Web">
+        <h1 className="b-logo" aria-label="むっちゃカメレオン">
           <span className="b-logo__row b-logo__row--s" aria-hidden="true">
             {logoSmall.map(([char, deg]) => <span key={char} className="b-logo__tile b-logo__tile--s" style={rotate(deg)}>{char}</span>)}
           </span>
@@ -51,7 +54,6 @@ export function TitleB() {
                 <span key={char} className="b-logo__tile" style={{ background: color, ...rotate(deg) }}>{char}</span>
               ),
             )}
-            <span className="b-logo__web">Web</span>
           </span>
         </h1>
 
@@ -82,8 +84,10 @@ export function TitleB() {
             </div>
           </div>
           <div className="b-board__lists">
-            <Ranking title="見つけ上手" color="var(--find)" label="スコア" unit="点" entries={findRanking} tilt={badgeTilt[0]} markTilt={12} />
-            <Ranking title="隠れ上手" color="var(--hide)" label="隠れ率" unit="%" entries={hideRanking} tilt={badgeTilt[1]} markTilt={-10} />
+            <Ranking title="見つけ上手" color="var(--find)" entries={findRanking} tilt={badgeTilt[0]} markTilt={12} />
+            {/* 本体と同じく、隠れ上手は平均点の下に評価・出題・発見の回数を添える */}
+            <Ranking title="隠れ上手" color="var(--hide)" entries={hideRanking} tilt={badgeTilt[1]} markTilt={-10}
+              detail={(entry) => `評価${entry.views}回・出題${entry.searched}回・発見${entry.found}回`} />
           </div>
         </section>
       </div>
@@ -93,11 +97,11 @@ export function TitleB() {
 
 const rulesSteps = {
   find: ["探すWebページを選んでスタート", "毎回選ばれる5体を、3分以内に見つけてクリック", "発見数と早さでスコアが決まる"],
-  hide: ["隠すWebページを選ぶ", "細め・標準・太めから体型を選ぶ", "配置して色を塗り、背景に溶け込ませる", "「ここに隠れる！」で公開する"],
+  hide: ["隠すWebページを選ぶ", "隠れる画面で、細め・標準・太めから体型を選ぶ", "配置して色を塗り、背景に溶け込ませる", "「ここに隠れる！」で公開する"],
 }
 const rulesNote = {
   find: "1体100点＋早さのボーナス最大20点。デコイを押すと残り時間が10秒減る",
-  hide: "画面に映って見つからない間だけ加点。見つかるとためた点が半分になる",
+  hide: "画面に映って見つからない間だけ、照準との距離に応じて毎秒1〜3点。見つかるとためた点が半分になる",
 }
 
 /** 遊び方。タイトルの「？ ルール」で開くモーダル。手順を短く出し、点数は1行だけ添える */
@@ -185,7 +189,7 @@ export function PartsB() {
         </div>
         <div className="b-parts__row">
           <button type="button" className="b-sticker b-parts__btn b-parts__btn--hide" style={rotate(2)}>ここに隠れる！</button>
-          <button type="button" className="b-sticker b-parts__btn b-parts__btn--s" style={rotate(-3)}>← 戻る</button>
+          <button type="button" className="b-sticker b-sticker--paper b-parts__btn b-parts__btn--s" style={rotate(-3)}>← 戻る</button>
           <div className="b-parts__tabs" style={rotate(-1)}>
             <button type="button" aria-pressed="true" className="b-tab" style={{ background: "var(--accent)", ...rotate(-2) }}>総合</button>
             <button type="button" aria-pressed="false" className="b-tab b-tab--off" style={rotate(1.5)}>デイリー</button>
@@ -197,7 +201,7 @@ export function PartsB() {
         <h2 className="b-parts__label" style={rotate(1)}>プレイ画面ヘッダー（見つける）</h2>
         <div className="b-parts__hud">
           <div className="b-parts__inline">
-            <button type="button" className="b-tab b-tab--off" style={rotate(-2)}>← ホーム</button>
+            <button type="button" className="b-tab b-tab--paper" style={{ background: "var(--paper)", ...rotate(-2) }}>← ホーム</button>
             <span className="b-parts__mode">見つける</span>
           </div>
           <div className="b-parts__timer" style={rotate(-2)}>

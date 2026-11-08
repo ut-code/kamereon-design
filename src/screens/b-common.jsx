@@ -36,12 +36,12 @@ export function Ground() {
   )
 }
 
-/** 白い縁のステッカーのボタン。size は l（タイトルのモード）/ m / s */
+/** 白い縁のステッカーのボタン。size は l（タイトルのモード）/ m / s。白（paper）のときは外側に細い線を引く（b-sticker--paper） */
 export function Sticker({ as: Tag = "button", color = "paper", size = "m", tilt = 0, className = "", style, children, ...props }) {
   return (
     <Tag
       type={Tag === "button" ? "button" : undefined}
-      className={`b-sticker b-sticker--${size} ${className}`}
+      className={`b-sticker b-sticker--${size}${color === "paper" ? " b-sticker--paper" : ""} ${className}`}
       style={{ background: `var(--${color})`, ...rotate(tilt), ...style }}
       {...props}
     >
@@ -50,14 +50,14 @@ export function Sticker({ as: Tag = "button", color = "paper", size = "m", tilt 
   )
 }
 
-/** 小さい札のボタン。pressed を渡すと切り替えボタンになり、押されていない間は薄紫 */
+/** 小さい札のボタン。pressed を渡すと切り替えボタンになり、押されていない間は薄紫。白のときは外側に細い線を引く（b-tab--paper） */
 export function Tab({ pressed, color = "paper", tilt = 0, className = "", children, ...props }) {
   const off = pressed === false
   return (
     <button
       type="button"
       aria-pressed={pressed}
-      className={`b-tab${off ? " b-tab--off" : ""} ${className}`}
+      className={`b-tab${off ? " b-tab--off" : color === "paper" ? " b-tab--paper" : ""} ${className}`}
       style={{ ...(off ? null : { background: `var(--${color})` }), ...rotate(tilt) }}
       {...props}
     >
@@ -89,20 +89,13 @@ export function ModeTag({ mode, tilt = 2 }) {
   return <span className="b-modetag" style={{ background: `var(--${mode})`, ...rotate(tilt) }}>{mode === "find" ? "見つける" : "隠す"}</span>
 }
 
-/** ホームから入る画面（ページ選択・体型選択・選んだページ）の上の帯 */
-export function FlowHeader({ mode, step, back = "home" }) {
+/** ホームから入る画面（ページ選択・選んだページ）の上の帯 */
+export function FlowHeader({ mode, back = "home" }) {
   return (
     <header className="b-flowhead">
       <div className="b-flowhead__group">
         <Sticker size="s" tilt={-2}>{back === "home" ? "← ホームへ" : "← ページ選択へ"}</Sticker>
         <ModeTag mode={mode} />
-        {step && (
-          <ol className="b-steps" aria-label={`2ステップ中${step}`}>
-            {["ページ", "体型"].map((name, index) => (
-              <li key={name} aria-current={index + 1 === step ? "step" : undefined}><span>{index + 1}</span>{name}</li>
-            ))}
-          </ol>
-        )}
       </div>
       {back !== "home" && <a className="b-textlink" href="#home">ホームへ</a>}
     </header>
@@ -113,14 +106,14 @@ export { Icon } from "./icon.jsx"
 
 /**
  * 体型の見本。本体の Home.jsx の BodyPreview と同じ形（丸い頭・首・角の丸い胴・腕・脚）
- * body は { id, width, limb }。脚の開きは本体と同じく細め 8・標準 12・太め 16
+ * body は { id, width, limb }。脚の開きは本体と同じく細め 8・標準 12・太め 16。size は 116×220 に対する倍率
  */
-export function BodyPreview({ body }) {
+export function BodyPreview({ body, size = 1 }) {
   const left = 44 - body.width / 2
   const right = 44 + body.width / 2
   const legSpread = body.id === "round" ? 16 : body.id === "slim" ? 8 : 12
   return (
-    <svg width="116" height="220" viewBox="0 0 88 168" aria-hidden="true" focusable="false">
+    <svg width={116 * size} height={220 * size} viewBox="0 0 88 168" aria-hidden="true" focusable="false">
       <g fill="currentColor" stroke="currentColor" strokeLinecap="round">
         <circle cx="44" cy="16" r="12" stroke="none" />
         <path d="M44 24V36" strokeWidth="9" />
